@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findStockByName } from "@/lib/krx";
+import { rateLimitOrNull } from "@/lib/rateLimit";
 
 export async function GET(req: NextRequest) {
+  const limited = rateLimitOrNull(req);
+  if (limited) return limited;
+
   const name = req.nextUrl.searchParams.get("name");
   if (!name) {
     return NextResponse.json({ error: "name is required" }, { status: 400 });

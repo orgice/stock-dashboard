@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTopStocks } from "@/lib/krx";
 import { withValuationBatch } from "@/lib/valuation";
+import { rateLimitOrNull } from "@/lib/rateLimit";
 
 export async function GET(req: NextRequest) {
+  const limited = rateLimitOrNull(req);
+  if (limited) return limited;
+
   const n = Number(req.nextUrl.searchParams.get("n") ?? "10");
   const ranked = await getTopStocks(n);
 
