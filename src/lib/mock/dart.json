@@ -1,0 +1,36 @@
+{
+  "005930": {
+    "disclosures": [
+      { "rceptNo": "20260710000123", "title": "주요사항보고서(자기주식취득결정)", "date": "2026-07-10" },
+      { "rceptNo": "20260628000456", "title": "분기보고서 (2026.06)", "date": "2026-06-28" },
+      { "rceptNo": "20260530000789", "title": "현금ㆍ현물배당결정", "date": "2026-05-30" }
+    ],
+    "financials": [
+      { "year": 2023, "revenue": 258900, "operatingProfit": 6570 },
+      { "year": 2024, "revenue": 300870, "operatingProfit": 32730 },
+      { "year": 2025, "revenue": 312400, "operatingProfit": 38900 }
+    ]
+  },
+  "000660": {
+    "disclosures": [
+      { "rceptNo": "20260712000234", "title": "유상증자결정", "date": "2026-07-12" },
+      { "rceptNo": "20260625000567", "title": "분기보고서 (2026.06)", "date": "2026-06-25" }
+    ],
+    "financials": [
+      { "year": 2023, "revenue": 32766, "operatingProfit": -7730 },
+      { "year": 2024, "revenue": 66192, "operatingProfit": 23500 },
+      { "year": 2025, "revenue": 74100, "operatingProfit": 29800 }
+    ]
+  },
+  "035420": {
+    "disclosures": [
+      { "rceptNo": "20260705000345", "title": "타법인주식및출자증권취득결정", "date": "2026-07-05" },
+      { "rceptNo": "20260620000678", "title": "분기보고서 (2026.06)", "date": "2026-06-20" }
+    ],
+    "financials": [
+      { "year": 2023, "revenue": 96706, "operatingProfit": 14888 },
+      { "year": 2024, "revenue": 105124, "operatingProfit": 17170 },
+      { "year": 2025, "revenue": 112300, "operatingProfit": 19400 }
+    ]
+  }
+}

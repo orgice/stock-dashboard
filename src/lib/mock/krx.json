@@ -1,0 +1,5 @@
+{
+  "005930": { "name": "삼성전자", "price": 84500, "changeRate": 1.32, "per": 13.8, "pbr": 1.4, "dividendYield": 2.1 },
+  "000660": { "name": "SK하이닉스", "price": 198500, "changeRate": -0.75, "per": 21.4, "pbr": 2.8, "dividendYield": 0.6 },
+  "035420": { "name": "NAVER", "price": 212000, "changeRate": 0.47, "per": 18.2, "pbr": 1.7, "dividendYield": 0.5 }
+}
