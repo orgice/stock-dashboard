@@ -51,6 +51,11 @@ export function WatchlistCard({ code, quote, onRemove, onAdd, added }: Props) {
           {quote.changeRate.toFixed(2)}%
         </span>
       </div>
+      {quote.asOfDate && (
+        <p className="text-xs text-black/40 dark:text-white/40">
+          {formatAsOfDate(quote.asOfDate)} 종가 기준 (실시간 아님)
+        </p>
+      )}
 
       <div className="grid grid-cols-3 gap-2 text-xs text-black/60 dark:text-white/60">
         <span>PER {quote.per?.toFixed(1) ?? "-"}</span>
@@ -59,4 +64,11 @@ export function WatchlistCard({ code, quote, onRemove, onAdd, added }: Props) {
       </div>
     </div>
   );
+}
+
+// "20260715" -> "7/15"
+function formatAsOfDate(basDd: string): string {
+  const month = Number(basDd.slice(4, 6));
+  const day = Number(basDd.slice(6, 8));
+  return `${month}/${day}`;
 }

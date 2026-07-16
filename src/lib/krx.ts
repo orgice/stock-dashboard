@@ -13,11 +13,16 @@ export type Quote = {
   per?: number;
   pbr?: number;
   dividendYield?: number;
+  // The trading day this closing price is from (YYYYMMDD). This API is
+  // end-of-day settlement data, not a live feed, so the UI needs this to show
+  // users the price isn't real-time. Undefined for mock data.
+  asOfDate?: string;
 };
 
 const MOCK_QUOTES = mockQuotes as Record<string, Quote>;
 
 type KrxRow = {
+  BAS_DD: string;
   ISU_CD: string;
   ISU_NM: string;
   TDD_CLSPRC: string;
@@ -143,6 +148,7 @@ function toQuote(row: KrxRow): Quote {
     price: Number(row.TDD_CLSPRC),
     changeRate: Number(row.FLUC_RT),
     sharesOutstanding: Number(row.LIST_SHRS),
+    asOfDate: row.BAS_DD,
   };
 }
 
