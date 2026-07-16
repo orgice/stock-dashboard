@@ -5,9 +5,11 @@ type Props = {
   code: string;
   quote: Quote;
   onRemove?: (code: string) => void;
+  onAdd?: (code: string, name: string) => void;
+  added?: boolean;
 };
 
-export function WatchlistCard({ code, quote, onRemove }: Props) {
+export function WatchlistCard({ code, quote, onRemove, onAdd, added }: Props) {
   const isUp = quote.changeRate >= 0;
 
   return (
@@ -28,6 +30,18 @@ export function WatchlistCard({ code, quote, onRemove }: Props) {
             삭제
           </button>
         )}
+        {onAdd &&
+          (added ? (
+            <span className="text-xs text-black/30 dark:text-white/30">추가됨</span>
+          ) : (
+            <button
+              onClick={() => onAdd(code, quote.name)}
+              className="text-xs text-black/40 hover:text-black dark:hover:text-white"
+              aria-label="관심종목에 추가"
+            >
+              + 추가
+            </button>
+          ))}
       </div>
 
       <div className="flex items-baseline gap-2">

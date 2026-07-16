@@ -1,5 +1,12 @@
 {
-  "005930": { "name": "삼성전자", "price": 84500, "changeRate": 1.32, "per": 13.8, "pbr": 1.4, "dividendYield": 2.1 },
-  "000660": { "name": "SK하이닉스", "price": 198500, "changeRate": -0.75, "per": 21.4, "pbr": 2.8, "dividendYield": 0.6 },
-  "035420": { "name": "NAVER", "price": 212000, "changeRate": 0.47, "per": 18.2, "pbr": 1.7, "dividendYield": 0.5 }
+  "005930": { "name": "삼성전자", "price": 84500, "changeRate": 1.32, "sharesOutstanding": 5969782550, "per": 13.8, "pbr": 1.4, "dividendYield": 2.1 },
+  "000660": { "name": "SK하이닉스", "price": 198500, "changeRate": -0.75, "sharesOutstanding": 728002365, "per": 21.4, "pbr": 2.8, "dividendYield": 0.6 },
+  "373220": { "name": "LG에너지솔루션", "price": 412000, "changeRate": 0.85, "sharesOutstanding": 234000000, "per": 45.2, "pbr": 3.1, "dividendYield": 0.3 },
+  "207940": { "name": "삼성바이오로직스", "price": 985000, "changeRate": -0.31, "sharesOutstanding": 71174000, "per": 58.6, "pbr": 5.2, "dividendYield": 0.1 },
+  "005380": { "name": "현대차", "price": 245000, "changeRate": 1.05, "sharesOutstanding": 209416191, "per": 5.8, "pbr": 0.6, "dividendYield": 4.5 },
+  "000270": { "name": "기아", "price": 118500, "changeRate": 0.68, "sharesOutstanding": 396447692, "per": 4.9, "pbr": 0.9, "dividendYield": 5.1 },
+  "068270": { "name": "셀트리온", "price": 178000, "changeRate": -1.12, "sharesOutstanding": 214872199, "per": 38.7, "pbr": 2.3, "dividendYield": 0 },
+  "035420": { "name": "NAVER", "price": 212000, "changeRate": 0.47, "sharesOutstanding": 161337503, "per": 18.2, "pbr": 1.7, "dividendYield": 0.5 },
+  "005935": { "name": "삼성전자우", "price": 71800, "changeRate": 1.41, "sharesOutstanding": 420000000, "per": 11.5, "pbr": 1.1, "dividendYield": 2.6 },
+  "105560": { "name": "KB금융", "price": 89200, "changeRate": 0.22, "sharesOutstanding": 330000000, "per": 6.2, "pbr": 0.6, "dividendYield": 6.8 }
 }

@@ -57,6 +57,48 @@ export async function getWatchlistQuotes(
   );
 }
 
+export type RankedQuote = Quote & { code: string };
+
+// Ranks by market cap (price * shares outstanding) since the KRX API has no
+// dedicated ranking endpoint — the full day's data already has what's needed.
+export async function getTopStocks(n: number): Promise<RankedQuote[]> {
+  if (!process.env.KRX_API_KEY) {
+    return Object.entries(MOCK_QUOTES)
+      .map(([code, quote]) => ({ code, ...quote }))
+      .sort((a, b) => marketCap(b) - marketCap(a))
+      .slice(0, n);
+  }
+
+  const rows = await fetchLatestRows();
+  return rows
+    .map((r) => ({ code: r.ISU_CD, ...toQuote(r) }))
+    .sort((a, b) => marketCap(b) - marketCap(a))
+    .slice(0, n);
+}
+
+function marketCap(q: Quote): number {
+  return q.price * (q.sharesOutstanding ?? 0);
+}
+
+// Exact name match wins; falls back to a substring match so "삼성전자" still
+// finds "삼성전자우" style variants aren't preferred over the exact hit.
+export async function findStockByName(name: string): Promise<{ code: string; name: string } | null> {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+
+  if (!process.env.KRX_API_KEY) {
+    const entries = Object.entries(MOCK_QUOTES);
+    const exact = entries.find(([, q]) => q.name === trimmed);
+    const partial = entries.find(([, q]) => q.name.includes(trimmed));
+    const hit = exact ?? partial;
+    return hit ? { code: hit[0], name: hit[1].name } : null;
+  }
+
+  const rows = await fetchLatestRows();
+  const row = rows.find((r) => r.ISU_NM === trimmed) ?? rows.find((r) => r.ISU_NM.includes(trimmed));
+  return row ? { code: row.ISU_CD, name: row.ISU_NM } : null;
+}
+
 // The full day's data is identical for every caller until the next trading
 // day's numbers are published, so it's cached rather than re-fetched (and
 // re-walked-back through empty days) on every request.

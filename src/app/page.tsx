@@ -8,14 +8,17 @@ import {
   removeFromWatchlist,
   type WatchlistItem,
 } from "@/lib/watchlist";
-import type { Quote } from "@/lib/krx";
+import type { RankedQuote, Quote } from "@/lib/krx";
+
+const TOP_STOCKS_COUNT = 10;
 
 export default function Home() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
   const [quotes, setQuotes] = useState<Record<string, Quote>>({});
   const [loading, setLoading] = useState(true);
-  const [newCode, setNewCode] = useState("");
+  const [topStocks, setTopStocks] = useState<RankedQuote[]>([]);
   const [newName, setNewName] = useState("");
+  const [addState, setAddState] = useState<"idle" | "loading" | "not-found">("idle");
 
   useEffect(() => {
     // Synced from localStorage, a browser-only source — must run post-hydration
@@ -38,16 +41,35 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [watchlist]);
 
+  useEffect(() => {
+    fetch(`/api/krx/top?n=${TOP_STOCKS_COUNT}`)
+      .then((res) => res.json())
+      .then((data) => setTopStocks(data.stocks ?? []));
+  }, []);
+
   function handleRemove(code: string) {
     setWatchlist(removeFromWatchlist(code));
   }
 
-  function handleAdd(e: React.FormEvent) {
+  function handleAddItem(code: string, name: string) {
+    setWatchlist(addToWatchlist({ code, name }));
+  }
+
+  async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
-    if (!newCode.trim() || !newName.trim()) return;
-    setWatchlist(addToWatchlist({ code: newCode.trim(), name: newName.trim() }));
-    setNewCode("");
+    const name = newName.trim();
+    if (!name) return;
+
+    setAddState("loading");
+    const res = await fetch(`/api/krx/search?name=${encodeURIComponent(name)}`);
+    if (!res.ok) {
+      setAddState("not-found");
+      return;
+    }
+    const stock = await res.json();
+    handleAddItem(stock.code, stock.name);
     setNewName("");
+    setAddState("idle");
   }
 
   return (
@@ -59,32 +81,35 @@ export default function Home() {
         </p>
       </header>
 
-      <form onSubmit={handleAdd} className="flex gap-2">
-        <input
-          value={newCode}
-          onChange={(e) => setNewCode(e.target.value)}
-          placeholder="종목코드 (예: 005930)"
-          className="flex-1 rounded border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm"
-        />
-        <input
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          placeholder="종목명 (예: 삼성전자)"
-          className="flex-1 rounded border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm"
-        />
-        <button
-          type="submit"
-          className="rounded bg-black text-white dark:bg-white dark:text-black px-4 py-2 text-sm font-medium"
-        >
-          추가
-        </button>
+      <form onSubmit={handleAdd} className="flex flex-col gap-1">
+        <div className="flex gap-2">
+          <input
+            value={newName}
+            onChange={(e) => {
+              setNewName(e.target.value);
+              setAddState("idle");
+            }}
+            placeholder="종목명 (예: 삼성전자)"
+            className="flex-1 rounded border border-black/15 dark:border-white/20 bg-transparent px-3 py-2 text-sm"
+          />
+          <button
+            type="submit"
+            disabled={addState === "loading"}
+            className="rounded bg-black text-white dark:bg-white dark:text-black px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            추가
+          </button>
+        </div>
+        {addState === "not-found" && (
+          <p className="text-xs text-red-500">&quot;{newName}&quot; 종목을 찾을 수 없습니다.</p>
+        )}
       </form>
 
       {loading ? (
         <p className="text-sm text-black/50 dark:text-white/50">불러오는 중...</p>
       ) : watchlist.length === 0 ? (
         <p className="text-sm text-black/50 dark:text-white/50">
-          관심종목이 없습니다. 위에서 종목을 추가해보세요.
+          관심종목이 없습니다. 종목명을 입력하거나 아래 인기 종목에서 추가해보세요.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -99,6 +124,25 @@ export default function Home() {
             ) : null
           )}
         </div>
+      )}
+
+      {topStocks.length > 0 && (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-sm font-semibold text-black/70 dark:text-white/70">
+            인기 종목 (시가총액 상위 {topStocks.length}개)
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {topStocks.map(({ code, ...quote }) => (
+              <WatchlistCard
+                key={code}
+                code={code}
+                quote={quote}
+                onAdd={handleAddItem}
+                added={watchlist.some((w) => w.code === code)}
+              />
+            ))}
+          </div>
+        </section>
       )}
 
       <a href="/disclosures" className="text-sm underline text-black/60 dark:text-white/60">
